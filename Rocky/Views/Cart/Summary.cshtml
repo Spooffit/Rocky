@@ -1,0 +1,262 @@
+﻿@using Rocky_Utility;
+@model Rocky_Models.ViewModels.ProductUserVM
+
+
+@{
+    var id = "payment-form";
+    if (!User.IsInRole(WC.AdminRole))
+    {
+        id = "null";
+    }
+}
+
+<form method="post" id="@id">
+    <br />
+    <div class="backgroundWhiteBorder">
+        <div class="container">
+            <div class="card">
+                <div class="card-header bg-dark text-light ml-0 row container">
+                    <div class="col-6">
+                        <i class="fa fa-shopping-cart"></i> &nbsp;
+                        Order Summary
+                    </div>
+                    <div class="col-6 text-end">
+                        <a asp-action="Index" class="btn btn-outline-info btn-sm">Back to Cart</a>
+                    </div>
+                </div>
+
+                <div class="card-body">
+                    <div class="container rounded p-2">
+                        <div class="row">
+                            <div class="col-12 col-lg-7 pb-4">
+                                <div class="row">
+                                    <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                        <span class="text-info">User Details:</span>
+                                    </h4>
+                                </div>
+                                <div class="row my-1">
+                                    <div class="col-3">
+                                        <label>Name</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <input asp-for="ApplicationUser.FullName" required type="text" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="row my-1">
+                                    <div class="col-3">
+                                        <label>Phone</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <input asp-for="ApplicationUser.PhoneNumber" required type="text" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="row my-1">
+                                    <div class="col-3">
+                                        <label>Email</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <input asp-for="ApplicationUser.Email" required type="text" class="form-control" />
+                                    </div>
+                                </div>
+                                @if (User.IsInRole(Rocky_Utility.WC.AdminRole))
+                                {
+                                    <div class="row my-1">
+                                        <div class="col-3">
+                                            <label>Address</label>
+                                        </div>
+                                        <div class="col-9">
+                                            <input asp-for="ApplicationUser.StreetAddress" required type="text" class="form-control" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row my-1">
+                                        <div class="col-3">
+                                            <label>City</label>
+                                        </div>
+                                        <div class="col-9">
+                                            <input asp-for="ApplicationUser.City" type="text" required class="form-control" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row my-1">
+                                        <div class="col-3">
+                                            <label>State</label>
+                                        </div>
+                                        <div class="col-9">
+                                            <input asp-for="ApplicationUser.State" type="text" required class="form-control" />
+                                        </div>
+                                    </div>
+
+                                    <div class="row my-1">
+                                        <div class="col-3">
+                                            <label>Postal Code</label>
+                                        </div>
+                                        <div class="col-9">
+                                            <input asp-for="ApplicationUser.PostalCode" type="text" required class="form-control" />
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <div class="col-12 col-lg-5 row">
+                                <div class="col-12">
+                                    <h4 class="d-flex justify-content-between align-items-center mb-3">
+                                        <span class="text-info">Summary:</span>
+                                    </h4>
+
+                                    <ul class="list-group mb-3">
+
+                                        @{
+                                            var orderTotal = 0.0;
+                                        }
+
+                                        @for (int i = 0; i < Model.ProductList.Count(); i++)
+                                        {
+                                            <input type="hidden" asp-for="@Model.ProductList[i].Id" />
+                                            <input type="hidden" asp-for="@Model.ProductList[i].Name" />
+                                            <input type="hidden" asp-for="@Model.ProductList[i].Price" />
+                                            <input type="hidden" asp-for="@Model.ProductList[i].TempSqFt" />
+
+                                            <li class="list-group-item d-flex justify-content-between">
+                                                <div>
+                                                    <h6 class="my-0">@Model.ProductList[i].Name</h6>
+                                                    @if (User.IsInRole(Rocky_Utility.WC.AdminRole))
+                                                    {
+                                                        <small class="text-muted">Sqft: $@Model.ProductList[i].TempSqFt</small>
+                                                    }
+                                                    else
+                                                    {
+                                                        <small class="text-muted">Price per Sqft: $@Model.ProductList[i].Price</small>
+                                                    }
+                                                </div>
+                                                @if (User.IsInRole(Rocky_Utility.WC.AdminRole))
+                                                {
+                                                    <span class="text-muted">$@(Model.ProductList[i].Price * Model.ProductList[i].TempSqFt) </span>
+                                                }
+                                            </li>
+                                            orderTotal += Model.ProductList[i].Price * Model.ProductList[i].TempSqFt;
+                                        }
+                                        @if (User.IsInRole(Rocky_Utility.WC.AdminRole))
+                                        {
+                                            <li class="list-group-item d-flex justify-content-between bg-light">
+                                                <small class="text-info">Total (USD)</small>
+                                                <strong class="text-info">$@orderTotal</strong>
+                                            </li>
+                                        }
+                                    </ul>
+
+                                </div>
+                                @if (User.IsInRole(Rocky_Utility.WC.AdminRole))
+                                {
+                                    <div class="col-12">
+                                        <div class="wrapper">
+                                            <div class="checkout container">
+                                                <div id="dropin-container"></div>
+                                                <input id="nonce" name="payment_method_nonce" type="hidden" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    <div class="row">
+                        <div class="col-12 col-md-5 offset-md-7">
+                            @if (User.IsInRole(Rocky_Utility.WC.AdminRole))
+                            {
+                                <button class="btn btn-success form-control" onclick="return validateInput()" id="sumbit-button">Submit Order</button>
+                            }
+                            else
+                            {
+                                <button type="submit" onclick="return validateInput()" class="btn btn-primary form-control">Submit Inquiry</button>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+
+@section Scripts{
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://js.braintreegateway.com/web/dropin/1.36.1/js/dropin.min.js"></script>
+    <script>
+
+        var client_token = "@ViewBag.ClientToken"
+        var form = document.querySelector('#payment-form');
+
+        braintree.dropin.create({
+            authorization: client_token,
+            container: '#dropin-container'
+        }, (error, dropinInstance) => {
+            form.addEventListener('submit', function () {
+                event.preventDefault();
+
+                dropinInstance.requestPaymentMethod(function (err, payload) {
+                    document.querySelector('#nonce').value = payload.nonce;
+                    form.submit();
+                });
+            });
+        });
+
+        function toOrder(map) {
+
+            var li = '';
+
+            for (const [key, value] of Object.entries(map)) {
+                li += `• ${key}` + '<br>'
+            }
+
+            //return `
+            //            <div style="width: 200px; margin:auto">
+            //              <ul>
+            //                  ${li}
+            //              <ul>
+            //            </div>
+            //                `
+            return li;
+
+        };
+
+        function validateInput() {
+
+            if (document.getElementById('ApplicationUser_StreetAddress') != undefined) {
+                var inputs = {
+                    FullName: document.getElementById("ApplicationUser_FullName").value,
+                    PhoneNumber: document.getElementById("ApplicationUser_PhoneNumber").value,
+                    Email: document.getElementById("ApplicationUser_Email").value,
+
+                    Address: document.getElementById("ApplicationUser_StreetAddress").value,
+                    City: document.getElementById("ApplicationUser_City").value,
+                    State: document.getElementById("ApplicationUser_State").value,
+                    PostalCode: document.getElementById("ApplicationUser_PostalCode").value
+                };
+            }
+            else {
+                var inputs = {
+                    FullName: document.getElementById("ApplicationUser_FullName").value,
+                    PhoneNumber: document.getElementById("ApplicationUser_PhoneNumber").value,
+                    Email: document.getElementById("ApplicationUser_Email").value,
+                };
+            }
+
+            var filtered = Object.fromEntries(Object.entries(inputs).filter(([k, v]) => v == ''));
+
+            if (Object.keys(filtered).length != 0) {
+                var str = toOrder(filtered);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    html: `Please enter : <br> ${str}`,
+                    confirmButtonColor: '#3085d6',
+                });
+                return false;
+            }
+            return true;
+        }
+    </script>
+}

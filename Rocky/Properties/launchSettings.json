@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "Rocky": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:8781;http://localhost:8782"
+    }
+  }
+}
