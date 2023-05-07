@@ -126,7 +126,7 @@
                             </div>
                             <div class="row my-1">
                                 <div class="col-9 offset-3">
-                                    <input type="submit" value="Update Order Details" class="btn btn-warning form-control"
+                                    <input disabled type="submit" value="Update Order Details" class="btn btn-warning form-control"
                                            asp-action="UpdateOrderDetails" formmethod="post" />
                                 </div>
                             </div>
@@ -172,16 +172,16 @@
 
                             @if (Model.OrderHeader.OrderStatus == Rocky_Utility.WC.StatusApproved)
                             {
-                                <input asp-action="StartProcessing" 
-                                        formmethod="post" 
+                                <input disabled asp-action="StartProcessing"
+                                   formmethod="post" 
                                         type="submit" 
                                         value="Start Processing" 
                                         class="btn btn-info form-control" />
                             }
                             @if (Model.OrderHeader.OrderStatus == Rocky_Utility.WC.StatusInProcess)
                             {
-                                <input asp-action="ShipOrder" 
-                                        formmethod="post" 
+                                <input disabled asp-action="ShipOrder"
+                                   formmethod="post" 
                                         type="submit" 
                                         value="Ship Order" 
                                         class="btn btn-primary form-control" />
@@ -190,7 +190,7 @@
                             && Model.OrderHeader.OrderStatus != Rocky_Utility.WC.StatusCancelled)
                             {
                                 <div class="pt-2">
-                                    <button asp-action="CancelOrder"
+                                    <button disabled asp-action="CancelOrder"
                                         type="submit"
                                         class="btn btn-danger form-control"
                                         formmethod="post">

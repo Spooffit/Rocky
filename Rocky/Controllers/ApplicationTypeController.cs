@@ -32,20 +32,21 @@ namespace Rocky.Controllers
         }
 
         //POST - CREATE
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Create(ApplicationType obj)
-        {
-            if (ModelState.IsValid)
-            {
-                _appTypeRepository.Add(obj);
-                _appTypeRepository.Save();
-                TempData[WC.Success] = "Application Type has been created successfully";
-                return RedirectToAction("Index");
-            }
-            TempData[WC.Error] = "Error while creating Application Type";
-            return View(obj);
-        }
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public IActionResult Create(ApplicationType obj)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        _appTypeRepository.Add(obj);
+        //        _appTypeRepository.Save();
+        //        TempData[WC.Success] = "Application Type has been created successfully";
+        //        return RedirectToAction("Index");
+        //    }
+        //    TempData[WC.Error] = "Error while creating Application Type";
+        //    return View(obj);
+        //}
 
 
         //GET - EDIT
@@ -62,20 +63,21 @@ namespace Rocky.Controllers
         }
 
         //POST - EDIT
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Edit(ApplicationType obj)
-        {
-            if (ModelState.IsValid)
-            {
-                _appTypeRepository.Update(obj);
-                _appTypeRepository.Save();
-                TempData[WC.Success] = "Application Type has been updated successfully";
-                return RedirectToAction("Index");
-            }
-            TempData[WC.Error] = "Error while updating Application Type";
-            return View(obj);
-        }
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public IActionResult Edit(ApplicationType obj)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        _appTypeRepository.Update(obj);
+        //        _appTypeRepository.Save();
+        //        TempData[WC.Success] = "Application Type has been updated successfully";
+        //        return RedirectToAction("Index");
+        //    }
+        //    TempData[WC.Error] = "Error while updating Application Type";
+        //    return View(obj);
+        //}
 
         //GET - DELETE
         public IActionResult Delete(int? id)
@@ -91,21 +93,22 @@ namespace Rocky.Controllers
         }
 
         //POST - DELETE
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult DeletePost(int? id)
-        {
-            var obj = _appTypeRepository.Find(id.GetValueOrDefault());
-            if (obj == null)
-            {
-                TempData[WC.Error] = "Error while deleting Application Type";
-                return RedirectToAction("Index");
-            }
 
-            _appTypeRepository.Remove(obj);
-            _appTypeRepository.Save();
-            TempData[WC.Success] = "Application Type has been deleted successfully";
-            return RedirectToAction("Index");
-        }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public IActionResult DeletePost(int? id)
+        //{
+        //    var obj = _appTypeRepository.Find(id.GetValueOrDefault());
+        //    if (obj == null)
+        //    {
+        //        TempData[WC.Error] = "Error while deleting Application Type";
+        //        return RedirectToAction("Index");
+        //    }
+
+        //    _appTypeRepository.Remove(obj);
+        //    _appTypeRepository.Save();
+        //    TempData[WC.Success] = "Application Type has been deleted successfully";
+        //    return RedirectToAction("Index");
+        //}
     }
 }

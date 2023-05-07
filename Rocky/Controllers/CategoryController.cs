@@ -30,20 +30,21 @@ namespace Rocky.Controllers
         }
 
         //POST - CREATE
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Create(Category obj)
-        {
-            if (ModelState.IsValid)
-            {
-                _categoryRepository.Add(obj);
-                _categoryRepository.Save();
-                TempData[WC.Success] = "Category has been created successfully";
-                return RedirectToAction("Index");
-            }
-            TempData[WC.Error] = "Error while creating Category";
-            return View(obj);
-        }
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public IActionResult Create(Category obj)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        _categoryRepository.Add(obj);
+        //        _categoryRepository.Save();
+        //        TempData[WC.Success] = "Category has been created successfully";
+        //        return RedirectToAction("Index");
+        //    }
+        //    TempData[WC.Error] = "Error while creating Category";
+        //    return View(obj);
+        //}
 
 
         //GET - EDIT
@@ -60,20 +61,21 @@ namespace Rocky.Controllers
         }
 
         //POST - EDIT
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Edit(Category obj)
-        {
-            if (ModelState.IsValid)
-            {
-                _categoryRepository.Update(obj);
-                _categoryRepository.Save();
-                TempData[WC.Success] = "Category has been updated successfully";
-                return RedirectToAction("Index");
-            }
-            TempData[WC.Error] = "Error while updating Category";
-            return View(obj);
-        }
+
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public IActionResult Edit(Category obj)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        _categoryRepository.Update(obj);
+        //        _categoryRepository.Save();
+        //        TempData[WC.Success] = "Category has been updated successfully";
+        //        return RedirectToAction("Index");
+        //    }
+        //    TempData[WC.Error] = "Error while updating Category";
+        //    return View(obj);
+        //}
 
         //GET - DELETE
         public IActionResult Delete(int? id)
@@ -89,22 +91,23 @@ namespace Rocky.Controllers
         }
 
         //POST - DELETE
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult DeletePost(int? id)
-        {
-            var obj = _categoryRepository.Find(id.GetValueOrDefault());
-            if (obj == null)
-            {
-                TempData[WC.Error] = "Error while deleting Category";
-                return RedirectToAction("Index");
-            }
 
-            _categoryRepository.Remove(obj);
-            _categoryRepository.Save();
-            TempData[WC.Success] = "Category has been deleted successfully";
-            return RedirectToAction("Index");
-        }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public IActionResult DeletePost(int? id)
+        //{
+        //    var obj = _categoryRepository.Find(id.GetValueOrDefault());
+        //    if (obj == null)
+        //    {
+        //        TempData[WC.Error] = "Error while deleting Category";
+        //        return RedirectToAction("Index");
+        //    }
+
+        //    _categoryRepository.Remove(obj);
+        //    _categoryRepository.Save();
+        //    TempData[WC.Success] = "Category has been deleted successfully";
+        //    return RedirectToAction("Index");
+        //}
 
     }
 }

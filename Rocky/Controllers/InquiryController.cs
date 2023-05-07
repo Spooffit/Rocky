@@ -65,25 +65,26 @@ namespace Rocky.Controllers
 
             TempData[WC.Success] = "Inquiry has been added to cart successfully";
 
-            return RedirectToAction("Index","Cart");
+            return RedirectToAction("Index", "Cart");
         }
 
         // POST - DELETE
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Delete()
-        {
-            InquiryHeader inquiryHeader = _inquiryHeaderRepository.FirstOrDefault(u => u.Id == InquiryVM.InquiryHeader.Id);
-            IEnumerable<InquiryDetail> inquiryDetails = _inquiryDetailRepository.GetAll(u => u.InquiryHeaderId == InquiryVM.InquiryHeader.Id);
 
-            _inquiryDetailRepository.RemoveRange(inquiryDetails);
-            _inquiryHeaderRepository.Remove(inquiryHeader);
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public IActionResult Delete()
+        //{
+        //    InquiryHeader inquiryHeader = _inquiryHeaderRepository.FirstOrDefault(u => u.Id == InquiryVM.InquiryHeader.Id);
+        //    IEnumerable<InquiryDetail> inquiryDetails = _inquiryDetailRepository.GetAll(u => u.InquiryHeaderId == InquiryVM.InquiryHeader.Id);
 
-            _inquiryHeaderRepository.Save();
-            TempData[WC.Success] = "Inquiry has been deleted successfully";
+        //    _inquiryDetailRepository.RemoveRange(inquiryDetails);
+        //    _inquiryHeaderRepository.Remove(inquiryHeader);
 
-            return RedirectToAction(nameof(Index));
-        }
+        //    _inquiryHeaderRepository.Save();
+        //    TempData[WC.Success] = "Inquiry has been deleted successfully";
+
+        //    return RedirectToAction(nameof(Index));
+        //}
 
         #region API CALLS
 

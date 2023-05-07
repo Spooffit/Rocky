@@ -159,138 +159,139 @@ namespace Rocky.Controllers
         }
 
         //POST - SUMMARY
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [ActionName("Summary")]
-        public async Task<IActionResult> SummaryPost(IFormCollection collection, ProductUserVM productUserVM)
-        {
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-            if (User.IsInRole(WC.AdminRole))
-            {
-                OrderHeader orderHeader = new OrderHeader()
-                {
-                    CreatedByUserId = claim.Value,
-                    FinalOrderTotal = ProductUserVM.ProductList.Sum(u => u.Price * u.TempSqFt),
-                    City = productUserVM.ApplicationUser.City,
-                    StreetAddress = productUserVM.ApplicationUser.StreetAddress,
-                    State = productUserVM.ApplicationUser.State,
-                    PostalCode = productUserVM.ApplicationUser.PostalCode,
-                    FullName = productUserVM.ApplicationUser.FullName,
-                    Email = productUserVM.ApplicationUser.Email,
-                    PhoneNumber = productUserVM.ApplicationUser.PhoneNumber,
-                    OrderDate = DateTime.Now,
-                    OrderStatus = WC.StatusPending,
-                };
-                _orderHeaderRepository.Add(orderHeader);
-                _orderHeaderRepository.Save();
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //[ActionName("Summary")]
+        //public async Task<IActionResult> SummaryPost(IFormCollection collection, ProductUserVM productUserVM)
+        //{
+        //    var claimsIdentity = (ClaimsIdentity)User.Identity;
+        //    var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
 
-                foreach (var product in productUserVM.ProductList)
-                {
-                    OrderDetail orderDetail = new OrderDetail()
-                    {
-                        OrderHeaderId = orderHeader.Id,
-                        PricePerSqFt = product.Price,
-                        Sqft = product.TempSqFt,
-                        ProductId = product.Id,
-                    };
-                    _orderDetailRepository.Add(orderDetail);
-                }
-                _orderDetailRepository.Save();
+        //    if (User.IsInRole(WC.AdminRole))
+        //    {
+        //        OrderHeader orderHeader = new OrderHeader()
+        //        {
+        //            CreatedByUserId = claim.Value,
+        //            FinalOrderTotal = ProductUserVM.ProductList.Sum(u => u.Price * u.TempSqFt),
+        //            City = productUserVM.ApplicationUser.City,
+        //            StreetAddress = productUserVM.ApplicationUser.StreetAddress,
+        //            State = productUserVM.ApplicationUser.State,
+        //            PostalCode = productUserVM.ApplicationUser.PostalCode,
+        //            FullName = productUserVM.ApplicationUser.FullName,
+        //            Email = productUserVM.ApplicationUser.Email,
+        //            PhoneNumber = productUserVM.ApplicationUser.PhoneNumber,
+        //            OrderDate = DateTime.Now,
+        //            OrderStatus = WC.StatusPending,
+        //        };
+        //        _orderHeaderRepository.Add(orderHeader);
+        //        _orderHeaderRepository.Save();
 
-                string nonceFromTheClient = collection["payment_method_nonce"];
+        //        foreach (var product in productUserVM.ProductList)
+        //        {
+        //            OrderDetail orderDetail = new OrderDetail()
+        //            {
+        //                OrderHeaderId = orderHeader.Id,
+        //                PricePerSqFt = product.Price,
+        //                Sqft = product.TempSqFt,
+        //                ProductId = product.Id,
+        //            };
+        //            _orderDetailRepository.Add(orderDetail);
+        //        }
+        //        _orderDetailRepository.Save();
 
-                var request = new TransactionRequest
-                {
-                    Amount = Convert.ToDecimal(orderHeader.FinalOrderTotal),
-                    PaymentMethodNonce = nonceFromTheClient,
-                    OrderId = orderHeader.Id.ToString(),
-                    Options = new TransactionOptionsRequest
-                    {
-                        SubmitForSettlement = true
-                    }
-                };
+        //        string nonceFromTheClient = collection["payment_method_nonce"];
 
-                var gateway = _brain.GetGateway();
+        //        var request = new TransactionRequest
+        //        {
+        //            Amount = Convert.ToDecimal(orderHeader.FinalOrderTotal),
+        //            PaymentMethodNonce = nonceFromTheClient,
+        //            OrderId = orderHeader.Id.ToString(),
+        //            Options = new TransactionOptionsRequest
+        //            {
+        //                SubmitForSettlement = true
+        //            }
+        //        };
 
-                Result<Transaction> result = gateway.Transaction.Sale(request);
+        //        var gateway = _brain.GetGateway();
 
-                if(result.IsSuccess())
-                {
-                    if (result.Target.ProcessorResponseText == "Approved")
-                    {
-                        orderHeader.TransactionId = result.Target.Id;
-                        orderHeader.OrderStatus = WC.StatusApproved;
-                    }
-                }
-                else
-                {
-                    orderHeader.OrderStatus= WC.StatusCancelled;
-                }
-                _orderHeaderRepository.Save();
+        //        Result<Transaction> result = gateway.Transaction.Sale(request);
 
-                return RedirectToAction(nameof(InquiryConfirmation), new {id = orderHeader.Id});
-            }
-            else 
-            {
-                var PathToTemplate = _env.WebRootPath + Path.DirectorySeparatorChar.ToString()
-                + "templates" + Path.DirectorySeparatorChar.ToString() + "Inquiry.html";
+        //        if(result.IsSuccess())
+        //        {
+        //            if (result.Target.ProcessorResponseText == "Approved")
+        //            {
+        //                orderHeader.TransactionId = result.Target.Id;
+        //                orderHeader.OrderStatus = WC.StatusApproved;
+        //            }
+        //        }
+        //        else
+        //        {
+        //            orderHeader.OrderStatus= WC.StatusCancelled;
+        //        }
+        //        _orderHeaderRepository.Save();
 
-                var subject = "New Inquiry";
-                string HtmlBody = "";
+        //        return RedirectToAction(nameof(InquiryConfirmation), new {id = orderHeader.Id});
+        //    }
+        //    else 
+        //    {
+        //        var PathToTemplate = _env.WebRootPath + Path.DirectorySeparatorChar.ToString()
+        //        + "templates" + Path.DirectorySeparatorChar.ToString() + "Inquiry.html";
 
-                using (StreamReader sr = System.IO.File.OpenText(PathToTemplate))
-                {
-                    HtmlBody = sr.ReadToEnd();
-                }
+        //        var subject = "New Inquiry";
+        //        string HtmlBody = "";
 
-                // Name: { 0}
-                // Email: { 1}
-                // Phone: { 2}
-                // Products { 3}
+        //        using (StreamReader sr = System.IO.File.OpenText(PathToTemplate))
+        //        {
+        //            HtmlBody = sr.ReadToEnd();
+        //        }
 
-                StringBuilder productListSB = new StringBuilder();
+        //        // Name: { 0}
+        //        // Email: { 1}
+        //        // Phone: { 2}
+        //        // Products { 3}
 
-                foreach (var product in productUserVM.ProductList)
-                {
-                    productListSB.Append($" - Name: {product.Name} <span style='font-size:14px;'> (ID: {product.Id}) </span><br>");
-                }
+        //        StringBuilder productListSB = new StringBuilder();
 
-                string messageBody = string.Format(HtmlBody,
-                    productUserVM.ApplicationUser.FullName,
-                    productUserVM.ApplicationUser.Email,
-                    productUserVM.ApplicationUser.PhoneNumber,
-                    productListSB.ToString());
+        //        foreach (var product in productUserVM.ProductList)
+        //        {
+        //            productListSB.Append($" - Name: {product.Name} <span style='font-size:14px;'> (ID: {product.Id}) </span><br>");
+        //        }
 
-                await _emailSender.SendEmailAsync(productUserVM.ApplicationUser.Email, subject, messageBody);
+        //        string messageBody = string.Format(HtmlBody,
+        //            productUserVM.ApplicationUser.FullName,
+        //            productUserVM.ApplicationUser.Email,
+        //            productUserVM.ApplicationUser.PhoneNumber,
+        //            productListSB.ToString());
 
-                InquiryHeader inquiryHeader = new InquiryHeader()
-                {
-                    ApplicationUserId = claim.Value,
-                    FullName = productUserVM.ApplicationUser.FullName,
-                    PhoneNumber = productUserVM.ApplicationUser.PhoneNumber,
-                    Email = productUserVM.ApplicationUser.Email,
-                    InquiryDate = DateTime.Now
-                };
+        //        await _emailSender.SendEmailAsync(productUserVM.ApplicationUser.Email, subject, messageBody);
 
-                _inquiryHeaderRepository.Add(inquiryHeader);
-                _inquiryHeaderRepository.Save();
+        //        InquiryHeader inquiryHeader = new InquiryHeader()
+        //        {
+        //            ApplicationUserId = claim.Value,
+        //            FullName = productUserVM.ApplicationUser.FullName,
+        //            PhoneNumber = productUserVM.ApplicationUser.PhoneNumber,
+        //            Email = productUserVM.ApplicationUser.Email,
+        //            InquiryDate = DateTime.Now
+        //        };
 
-                foreach (var product in productUserVM.ProductList)
-                {
-                    InquiryDetail inquiryDetail = new InquiryDetail()
-                    {
-                        InquiryHeaderId = inquiryHeader.Id,
-                        ProductId = product.Id,
-                    };
-                    _inquiryDetailRepository.Add(inquiryDetail);
-                }
-                _inquiryDetailRepository.Save();
-            }
+        //        _inquiryHeaderRepository.Add(inquiryHeader);
+        //        _inquiryHeaderRepository.Save();
 
-            return RedirectToAction(nameof(InquiryConfirmation));
-        }
+        //        foreach (var product in productUserVM.ProductList)
+        //        {
+        //            InquiryDetail inquiryDetail = new InquiryDetail()
+        //            {
+        //                InquiryHeaderId = inquiryHeader.Id,
+        //                ProductId = product.Id,
+        //            };
+        //            _inquiryDetailRepository.Add(inquiryDetail);
+        //        }
+        //        _inquiryDetailRepository.Save();
+        //    }
+
+        //    return RedirectToAction(nameof(InquiryConfirmation));
+        //}
 
         public IActionResult InquiryConfirmation(int id=0)
         {

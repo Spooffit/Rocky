@@ -51,11 +51,11 @@ else
 
             @if (User.IsInRole(WC.AdminRole))
             {
-                <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-warning">Register Admin User</button>
+                <button disabled id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-warning">Register Admin User</button>
             }
             else
             {
-                <button id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
+                <button dis id="registerSubmit" type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
             }
 
 

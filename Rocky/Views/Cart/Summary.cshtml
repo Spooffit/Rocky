@@ -166,7 +166,7 @@
                         <div class="col-12 col-md-5 offset-md-7">
                             @if (User.IsInRole(Rocky_Utility.WC.AdminRole))
                             {
-                                <button class="btn btn-success form-control" onclick="return validateInput()" id="sumbit-button">Submit Order</button>
+                                <button disabled class="btn btn-success form-control" onclick="return validateInput()" id="sumbit-button">Submit Order</button>
                             }
                             else
                             {

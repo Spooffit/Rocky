@@ -18,7 +18,7 @@ namespace Rocky_Utility
 
         public Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
-            return Execute(email,subject,htmlMessage);
+            return Execute(email, subject, htmlMessage);
         }
 
         public async Task Execute(string email, string subject, string body)

@@ -53,65 +53,66 @@ namespace Rocky.Controllers
         }
 
         //POST - UPSERT
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Upsert(ProductVM productVM)
-        {
-            if (ModelState.IsValid) 
-            {
-                var files = HttpContext.Request.Form.Files;
-                string webRootPath = _env.WebRootPath;
 
-                if (productVM.Product.Id == 0) //CREATE
-                {
-                    string upload = webRootPath + WC.ImagePath;
-                    string fileName = Guid.NewGuid().ToString();
-                    string extension = Path.GetExtension(files[0].FileName);
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public IActionResult Upsert(ProductVM productVM)
+        //{
+        //    if (ModelState.IsValid) 
+        //    {
+        //        var files = HttpContext.Request.Form.Files;
+        //        string webRootPath = _env.WebRootPath;
 
-                    using (var fileStream = new FileStream(Path.Combine(upload, fileName+extension), FileMode.Create))
-                        files[0].CopyTo(fileStream);
+        //        if (productVM.Product.Id == 0) //CREATE
+        //        {
+        //            string upload = webRootPath + WC.ImagePath;
+        //            string fileName = Guid.NewGuid().ToString();
+        //            string extension = Path.GetExtension(files[0].FileName);
 
-                    productVM.Product.Image = fileName + extension;
+        //            using (var fileStream = new FileStream(Path.Combine(upload, fileName+extension), FileMode.Create))
+        //                files[0].CopyTo(fileStream);
 
-                    _productRepository.Add(productVM.Product);
-                }
-                else //UPDATE
-                {
-                    var objFromDb = _productRepository.FirstOrDefault(x => x.Id == productVM.Product.Id, IsTracking:false);
+        //            productVM.Product.Image = fileName + extension;
 
-                    if (files.Count > 0)
-                    {
-                        string upload = webRootPath + WC.ImagePath;
-                        string fileName = Guid.NewGuid().ToString();
-                        string extension = Path.GetExtension(files[0].FileName);
+        //            _productRepository.Add(productVM.Product);
+        //        }
+        //        else //UPDATE
+        //        {
+        //            var objFromDb = _productRepository.FirstOrDefault(x => x.Id == productVM.Product.Id, IsTracking:false);
 
-                        var oldFile = Path.Combine(upload, objFromDb.Image);
+        //            if (files.Count > 0)
+        //            {
+        //                string upload = webRootPath + WC.ImagePath;
+        //                string fileName = Guid.NewGuid().ToString();
+        //                string extension = Path.GetExtension(files[0].FileName);
 
-                        if (System.IO.File.Exists(oldFile))
-                                System.IO.File.Delete(oldFile);
+        //                var oldFile = Path.Combine(upload, objFromDb.Image);
 
-                        using (var fileStream = new FileStream(Path.Combine(upload, fileName + extension), FileMode.Create))
-                            files[0].CopyTo(fileStream);
+        //                if (System.IO.File.Exists(oldFile))
+        //                        System.IO.File.Delete(oldFile);
 
-                        productVM.Product.Image = fileName + extension;
-                    }
-                    else
-                    {
-                        productVM.Product.Image = objFromDb.Image;
-                    }
-                    _productRepository.Update(productVM.Product);
-                } 
+        //                using (var fileStream = new FileStream(Path.Combine(upload, fileName + extension), FileMode.Create))
+        //                    files[0].CopyTo(fileStream);
 
-                _productRepository.Save();
-                TempData[WC.Success] = "Action has been performed successfully";
-                return RedirectToAction("Index");
-            }
+        //                productVM.Product.Image = fileName + extension;
+        //            }
+        //            else
+        //            {
+        //                productVM.Product.Image = objFromDb.Image;
+        //            }
+        //            _productRepository.Update(productVM.Product);
+        //        } 
 
-            productVM.CategorySelectList = _productRepository.GetAllDropdownList(WC.CategoryName);
-            productVM.ApplicationTypeSelectList = _productRepository.GetAllDropdownList(WC.ApplicationTypeName);
-            TempData[WC.Error] = "Error while performing action";
-            return View(productVM);
-        }
+        //        _productRepository.Save();
+        //        TempData[WC.Success] = "Action has been performed successfully";
+        //        return RedirectToAction("Index");
+        //    }
+
+        //    productVM.CategorySelectList = _productRepository.GetAllDropdownList(WC.CategoryName);
+        //    productVM.ApplicationTypeSelectList = _productRepository.GetAllDropdownList(WC.ApplicationTypeName);
+        //    TempData[WC.Error] = "Error while performing action";
+        //    return View(productVM);
+        //}
 
         //GET - DELETE
         public IActionResult Delete(int? id)
@@ -128,27 +129,28 @@ namespace Rocky.Controllers
         }
 
         //POST - DELETE
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public IActionResult DeletePost(int? id)
-        {
-            var obj = _productRepository.Find(id.GetValueOrDefault());
-            if (obj == null)
-            {
-                TempData[WC.Error] = "Error while deleting Product";
-                return RedirectToAction("Index");
-            }
 
-            var filePath = Path.Combine(_env.WebRootPath + WC.ImagePath + obj.Image);
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public IActionResult DeletePost(int? id)
+        //{
+        //    var obj = _productRepository.Find(id.GetValueOrDefault());
+        //    if (obj == null)
+        //    {
+        //        TempData[WC.Error] = "Error while deleting Product";
+        //        return RedirectToAction("Index");
+        //    }
 
-            if (System.IO.File.Exists(filePath))
-                System.IO.File.Delete(filePath);
+        //    var filePath = Path.Combine(_env.WebRootPath + WC.ImagePath + obj.Image);
 
-            _productRepository.Remove(obj);
+        //    if (System.IO.File.Exists(filePath))
+        //        System.IO.File.Delete(filePath);
 
-            _productRepository.Save();
-            TempData[WC.Success] = "Product has been deleted successfully";
-            return RedirectToAction("Index");
-        }
+        //    _productRepository.Remove(obj);
+
+        //    _productRepository.Save();
+        //    TempData[WC.Success] = "Product has been deleted successfully";
+        //    return RedirectToAction("Index");
+        //}
     }
 }
