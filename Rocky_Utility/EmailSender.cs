@@ -14,6 +14,11 @@ namespace Rocky_Utility
         public EmailSender(IConfiguration configuration)
         {
             _configuration = configuration;
+            _emailSTMP = new EmailSMTP()
+            {
+                EmailSender = _configuration["EmailSMTP_EmailSender"] ?? "",
+                AppPassword = _configuration["EmailSMTP_AppPassword"] ?? ""
+            };
         }
 
         public Task SendEmailAsync(string email, string subject, string htmlMessage)
@@ -23,8 +28,6 @@ namespace Rocky_Utility
 
         public async Task Execute(string email, string subject, string body)
         {
-            _emailSTMP.EmailSender = _configuration["EmailSMTP_EmailSender"] ?? "";
-            _emailSTMP.AppPassword = _configuration["EmailSMTP_AppPassword"] ?? "";
 
             var message = new MimeMessage();
             message.From.Add(MailboxAddress.Parse(_emailSTMP.EmailSender));
