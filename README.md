@@ -1,7 +1,5 @@
 # Rocky
 
-<br>
-
 Study project. Simple ASP.NET 5 MVC Website for ordering stone coverings.
 
 <hr>
