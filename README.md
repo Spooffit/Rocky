@@ -19,7 +19,7 @@ Study project. Simple ASP.NET 5 MVC Website for ordering stone coverings.
 
 <h2><img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Airplane%20Arrival.png" alt="Airplane Arrival" width="25" height="25" /> Demo</h2>
 
-[Demo Link](https://fontawesome.com/)
+[Demo Link](https://supekek-001-site1.ctempurl.com)
 
 <h2><img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Rocket.png" alt="Rocket" width="25" height="25" /> Run Locally</h2>
 
