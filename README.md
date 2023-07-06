@@ -21,6 +21,16 @@ Study project. Simple ASP.NET 5 MVC Website for ordering stone coverings.
 
 [Demo Link](https://supekek-001-site1.ctempurl.com)
 
+Some functions are disabled for security reasons.
+
+Admin: <br>
+Login: admin@gmail.com <br>
+Password: Admin123# <br>
+
+Customer: <br>
+Login: customer@gmail.com <br>
+Password: User123# <br>
+
 <h2><img src="https://raw.githubusercontent.com/Tarikul-Islam-Anik/Animated-Fluent-Emojis/master/Emojis/Travel%20and%20places/Rocket.png" alt="Rocket" width="25" height="25" /> Run Locally</h2>
 
 Clone the project
